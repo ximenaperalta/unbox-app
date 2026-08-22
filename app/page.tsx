@@ -69,7 +69,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-gray-200 px-8 py-8 text-center text-sm text-gray-400">
-        UNBOX · Negocios Inteligentes y Comercio Digital · AI-101
+        UNBOX · Negocios Inteligentes y Comercio Digital · AI-101. Ximena Peralta
       </footer>
     </div>
   );
