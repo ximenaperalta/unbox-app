@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
@@ -5,9 +7,10 @@ export default function Home() {
       <nav className="border-b border-gray-200 px-8 py-4 flex justify-between items-center">
         <span className="text-xl font-bold tracking-tight">UNBOX</span>
         <div className="flex gap-8 text-sm text-gray-600">
-          <a href="/" className="hover:text-black">Home</a>
-          <a href="/about" className="hover:text-black">About</a>
-          <a href="/docs" className="hover:text-black">Docs</a>
+          <Link href="/" className="hover:text-black">Home</Link>
+          <Link href="/about" className="hover:text-black">About</Link>
+          <Link href="/core" className="hover:text-black">Core</Link>
+          <Link href="/docs" className="hover:text-black">Docs</Link>
         </div>
       </nav>
 
