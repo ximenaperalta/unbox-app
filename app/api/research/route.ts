@@ -11,14 +11,14 @@ export async function POST(request: NextRequest) {
 
   const { product, market } = body;
 
-  if (!product?.trim() || !market?.trim()) {
+  if (!product?.trim()) {
     return NextResponse.json(
-      { error: "product and market are required." },
+      { error: "product is required." },
       { status: 400 }
     );
   }
 
-  const brief = generateResearchBrief({ product, market });
+  const brief = generateResearchBrief({ product, market: market ?? "" });
 
   return NextResponse.json({
     ...brief,

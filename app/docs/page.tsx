@@ -113,8 +113,8 @@ invent a product, customer, or budget that wasn't given.`}
           </h3>
           <pre className="bg-ink text-bg text-xs p-4 overflow-x-auto mb-6">
 {`{
-  product: string,  // required — product or category
-  market: string,    // required — target market
+  product: string,   // required — product or category
+  market?: string,   // optional — target market
 }`}
           </pre>
 
@@ -126,7 +126,7 @@ invent a product, customer, or budget that wasn't given.`}
 
 Given:
 - Product/category: {product}
-- Target market: {market}
+- Target market: {market or "unspecified"}
 
 Return a structured research brief with exactly these four parts:
 1. globalExamples – 5 real-world unboxing approaches used in this category

@@ -14,7 +14,6 @@ interface ResearchFormProps {
 
 const REQUIRED_FIELDS: { key: keyof ResearchFormValues; label: string }[] = [
   { key: "product", label: "Product / category" },
-  { key: "market", label: "Target market" },
 ];
 
 const inputClasses =
@@ -65,7 +64,7 @@ export default function ResearchForm({ onSubmit, isSubmitting }: ResearchFormPro
 
       <div>
         <label htmlFor="market" className={labelClasses}>
-          Target market <span className="normal-case text-ink-soft/70">(required)</span>
+          Target market <span className="normal-case text-ink-soft/70">(optional)</span>
         </label>
         <input
           id="market"
