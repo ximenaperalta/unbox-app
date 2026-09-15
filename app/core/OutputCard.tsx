@@ -20,17 +20,17 @@ const SECTIONS: { key: keyof CoreBrief; label: string }[] = [
 export default function OutputCard({ brief, onSave, isSaving, isSaved }: OutputCardProps) {
   if (!brief) {
     return (
-      <div className="border border-dashed border-gray-200 rounded-xl px-6 py-10 text-center text-sm text-gray-400">
+      <div className="border border-dashed border-line px-6 py-10 text-center text-sm text-ink-soft">
         Fill in the form and generate a brief to see it here.
       </div>
     );
   }
 
   return (
-    <div className="border border-gray-200 rounded-xl p-6 flex flex-col gap-5">
+    <div className="border border-line p-6 flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-gray-900">Unboxing Brief</h3>
-        <span className="text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-full">
+        <h3 className="font-bold text-ink">Unboxing Brief</h3>
+        <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-accent border border-accent px-2.5 py-1">
           Simulated AI Output
         </span>
       </div>
@@ -38,10 +38,10 @@ export default function OutputCard({ brief, onSave, isSaving, isSaved }: OutputC
       <div className="flex flex-col gap-4">
         {SECTIONS.map(({ key, label }) => (
           <div key={key}>
-            <div className="text-xs font-medium uppercase tracking-wide text-gray-400 mb-1">
+            <div className="font-label text-[11px] uppercase tracking-[0.06em] text-ink-soft mb-1">
               {label}
             </div>
-            <p className="text-sm text-gray-700 leading-relaxed">{brief[key]}</p>
+            <p className="text-sm text-ink leading-relaxed">{brief[key]}</p>
           </div>
         ))}
       </div>
@@ -49,7 +49,7 @@ export default function OutputCard({ brief, onSave, isSaving, isSaved }: OutputC
       <button
         onClick={onSave}
         disabled={isSaving || isSaved}
-        className="self-start bg-black text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+        className="font-label font-bold text-[13.5px] self-start bg-ink text-bg px-6 py-2.5 hover:bg-accent disabled:bg-line disabled:text-ink-soft disabled:cursor-not-allowed transition-colors"
       >
         {isSaved ? "Saved ✓" : isSaving ? "Saving…" : "Save to library"}
       </button>

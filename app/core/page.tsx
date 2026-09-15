@@ -1,12 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useRef, useState } from "react";
 import { CoreBrief } from "@/lib/generateCoreBrief";
 import CoreForm, { CoreFormValues } from "./CoreForm";
 import OutputCard from "./OutputCard";
 import SavedOutputsList, { SavedOutputsListHandle } from "./SavedOutputsList";
 import { supabase } from "@/lib/supabaseClient";
+import Nav from "../components/Nav";
+import Grain from "../components/Grain";
 
 export default function CorePage() {
   const [brief, setBrief] = useState<CoreBrief | null>(null);
@@ -81,29 +82,49 @@ export default function CorePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <nav className="border-b border-gray-200 px-8 py-4 flex justify-between items-center">
-        <span className="text-xl font-bold tracking-tight">UNBOX</span>
-        <div className="flex gap-8 text-sm text-gray-600">
-          <Link href="/" className="hover:text-black">Home</Link>
-          <Link href="/about" className="hover:text-black">About</Link>
-          <Link href="/core" className="text-black font-medium">Core</Link>
-          <Link href="/docs" className="hover:text-black">Docs</Link>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-bg">
+      <Grain />
+      <Nav active="/core" />
 
-      <section className="max-w-4xl mx-auto px-8 py-16">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-3">
-          Generative Core Agent
+      <section className="relative z-[3] max-w-[980px] mx-auto px-8 pt-6 pb-16">
+        <div className="flex justify-between items-start gap-6 flex-wrap mb-7">
+          <div className="flex items-center gap-2.5 font-label text-[12.5px] uppercase tracking-[0.1em] text-ink-soft">
+            <span className="w-2 h-2 rounded-full bg-accent" />
+            Generative Core Agent
+          </div>
+          <div className="text-right font-label text-[11px] leading-[1.9] border-l border-line pl-3.5 whitespace-nowrap">
+            <div>
+              <span className="uppercase tracking-[0.08em] text-[9.5px] text-ink-soft">
+                Output{" "}
+              </span>
+              <span className="font-bold">Simulated AI</span>
+            </div>
+            <div>
+              <span className="uppercase tracking-[0.08em] text-[9.5px] text-ink-soft">
+                Logic{" "}
+              </span>
+              <span className="font-bold">Template fn</span>
+            </div>
+            <div>
+              <span className="uppercase tracking-[0.08em] text-[9.5px] text-ink-soft">
+                Latency{" "}
+              </span>
+              <span className="font-bold">~40ms</span>
+            </div>
+          </div>
+        </div>
+
+        <h1 className="font-display uppercase leading-[0.9] text-[clamp(40px,6.5vw,80px)] tracking-tight mb-4">
+          Design the brief.
         </h1>
-        <p className="text-gray-500 mb-10 max-w-2xl">
+        <p className="text-[15.5px] text-ink-soft max-w-[52ch] mb-12 leading-relaxed">
           Describe your product, customer, and brand — get back a structured
           unboxing brief you can hand to a packaging supplier.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-10">
+        <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-4">
+            <h2 className="font-label text-[11px] uppercase tracking-[0.1em] text-ink-soft mb-5">
               Intake
             </h2>
             <CoreForm onSubmit={handleGenerate} isSubmitting={isGenerating} />
@@ -113,7 +134,7 @@ export default function CorePage() {
           </div>
 
           <div>
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-4">
+            <h2 className="font-label text-[11px] uppercase tracking-[0.1em] text-ink-soft mb-5">
               Output
             </h2>
             <OutputCard
@@ -130,13 +151,14 @@ export default function CorePage() {
           </div>
         </div>
 
-        <div className="mt-16 pt-10 border-t border-gray-200">
+        <div className="mt-16 pt-10 border-t border-line">
           <SavedOutputsList ref={savedListRef} />
         </div>
       </section>
 
-      <footer className="border-t border-gray-200 px-8 py-8 text-center text-sm text-gray-400">
-        UNBOX · Negocios Inteligentes y Comercio Digital · AI-101. Ximena Peralta
+      <footer className="relative z-[3] border-t border-line px-8 py-8 text-center font-label text-[11px] text-ink-soft">
+        UNBOX · Negocios Inteligentes y Comercio Digital · AI-101. Ximena
+        Peralta
       </footer>
     </div>
   );

@@ -43,10 +43,12 @@ const SavedOutputsList = forwardRef<SavedOutputsListHandle>(function SavedOutput
 
   return (
     <div>
-      <h3 className="font-semibold text-gray-900 mb-3">Saved briefs</h3>
+      <h3 className="font-label text-[11px] uppercase tracking-[0.1em] text-ink-soft mb-4">
+        Saved briefs
+      </h3>
 
       {loading && rows.length === 0 && (
-        <p className="text-sm text-gray-400">Loading saved briefs…</p>
+        <p className="text-sm text-ink-soft">Loading saved briefs…</p>
       )}
 
       {error && (
@@ -56,7 +58,7 @@ const SavedOutputsList = forwardRef<SavedOutputsListHandle>(function SavedOutput
       )}
 
       {!loading && !error && rows.length === 0 && (
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-ink-soft">
           No briefs saved yet — generate one above and save it to see it here.
         </p>
       )}
@@ -66,12 +68,12 @@ const SavedOutputsList = forwardRef<SavedOutputsListHandle>(function SavedOutput
           {rows.map((row) => (
             <div
               key={row.id}
-              className="shrink-0 border border-gray-200 rounded-xl px-4 py-3 min-w-[180px]"
+              className="shrink-0 border border-line px-4 py-3 min-w-[180px]"
             >
-              <div className="text-sm font-medium text-gray-900 truncate">
+              <div className="text-sm font-medium text-ink truncate">
                 {row.product}
               </div>
-              <div className="text-xs text-gray-400 mt-1">
+              <div className="font-label text-[10.5px] text-ink-soft mt-1">
                 {new Date(row.created_at).toLocaleDateString(undefined, {
                   year: "numeric",
                   month: "short",
