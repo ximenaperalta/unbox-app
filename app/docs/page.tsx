@@ -87,6 +87,78 @@ invent a product, customer, or budget that wasn't given.`}
             request/response flow.
           </p>
         </article>
+
+        <article className="border border-line p-8 bg-bg-2 mt-8">
+          <div className="flex items-center justify-between gap-4 flex-wrap mb-2">
+            <h2 className="text-xl font-bold text-ink">
+              Week 2 — Research + Benchmarking Agent (/research)
+            </h2>
+            <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-accent border border-accent px-2.5 py-1 whitespace-nowrap">
+              Simulated
+            </span>
+          </div>
+          <p className="text-sm text-ink-soft mb-6 leading-relaxed">
+            The <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/research</code> page
+            turns a product/category + target market into 5 global reference examples, a
+            Mexico-localization note, an 8-row competitor/substitute table, and a risk map.
+            Same rule as Week 1: this is a deterministic template function,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">generateResearchBrief()</code>{" "}
+            in{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">lib/generateResearchBrief.ts</code>,
+            not a live web search or paid API.
+          </p>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            Inputs
+          </h3>
+          <pre className="bg-ink text-bg text-xs p-4 overflow-x-auto mb-6">
+{`{
+  product: string,  // required — product or category
+  market: string,    // required — target market
+}`}
+          </pre>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            Template logic (what a real prompt would ask for)
+          </h3>
+          <pre className="bg-ink text-bg text-xs p-4 overflow-x-auto mb-6 whitespace-pre-wrap">
+{`You are a market researcher and packaging strategist.
+
+Given:
+- Product/category: {product}
+- Target market: {market}
+
+Return a structured research brief with exactly these four parts:
+1. globalExamples – 5 real-world unboxing approaches used in this category
+2. mexicoNote – localization considerations specific to Mexico (delivery,
+   payment norms, climate/durability, customs)
+3. competitors – 8 competitors/substitutes, each with a name, type
+   (direct/substitute), price tier, differentiator, and threat level
+4. riskMap – which of those 8 represent the highest competitive pressure
+   and where the real differentiation opportunity is
+
+Do not invent a product or market that wasn't given. Label every
+competitor honestly as a category/archetype, not a real named company,
+unless the model has verified, current information about one.`}
+          </pre>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            Current (simulated) implementation
+          </h3>
+          <p className="text-sm text-ink-soft leading-relaxed">
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">generateResearchBrief()</code>{" "}
+            matches the product/category text against a keyword lookup (beauty, food,
+            fashion, tech, home, subscription, or a general default) to pick 5 global
+            examples and a Mexico note. The 8 competitors come from fixed
+            competitive-strategy archetypes — direct competitor, retail incumbent,
+            private label, marketplace listing, local artisan, subscription rival, DIY
+            substitute, and &ldquo;do nothing&rdquo; — rather than invented named
+            companies, since real competitor research would need a live search this
+            project doesn&apos;t have yet. The risk map is derived directly from which
+            archetypes are marked high vs. low threat. Pure function, same testing
+            approach as Week 1.
+          </p>
+        </article>
       </section>
 
       <footer className="relative z-[3] border-t border-line px-8 py-8 text-center font-label text-[11px] text-ink-soft">
