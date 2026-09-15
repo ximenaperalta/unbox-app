@@ -19,7 +19,7 @@ const PILLARS = [
 
 const ROADMAP = [
   { week: "Week 1", feature: "AI unboxing experience generator", status: "Live" },
-  { week: "Week 2", feature: "Brand identity input and style matching", status: null },
+  { week: "Week 2", feature: "Research + benchmarking dashboard", status: "Live" },
   { week: "Week 3", feature: "Saved results dashboard", status: null },
   { week: "Week 4", feature: "Competitor unboxing analysis", status: null },
   { week: "Week 5", feature: "Full packaging brief export", status: null },
