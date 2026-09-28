@@ -86,6 +86,19 @@ invent a product, customer, or budget that wasn't given.`}
             swap in a real model call later without changing anything else in the
             request/response flow.
           </p>
+          <p className="text-sm text-ink-soft leading-relaxed mt-4">
+            <strong className="text-ink">Update (human validation feedback):</strong> a
+            tester asked for pictures of the materials alongside the output. Since this
+            project doesn&apos;t call a paid image-generation API, and faking a photo of
+            a material that doesn&apos;t exist would misrepresent the output as more
+            &ldquo;real&rdquo; than it is,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">
+              generateCoreBrief()
+            </code>{" "}
+            now returns a small set of fixed, illustrative material icons per voice
+            tag instead — clearly icons, not photography, but still a faster visual
+            read than text alone.
+          </p>
         </article>
 
         <article className="border border-line p-8 bg-bg-2 mt-8">

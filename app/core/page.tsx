@@ -44,6 +44,7 @@ export default function CorePage() {
         inserts: data.inserts,
         revealMoment: data.revealMoment,
         brandFeel: data.brandFeel,
+        materialIcons: data.materialIcons,
       });
       setLastValues(values);
     } catch (err) {

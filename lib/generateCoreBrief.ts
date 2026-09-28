@@ -29,9 +29,10 @@ export interface CoreBrief {
   inserts: string;
   revealMoment: string;
   brandFeel: string;
+  materialIcons: MaterialTag[];
 }
 
-type VoiceTag =
+export type VoiceTag =
   | "minimal"
   | "luxury"
   | "playful"
@@ -39,6 +40,26 @@ type VoiceTag =
   | "cozy"
   | "bold"
   | "default";
+
+/**
+ * A small, fixed set of illustrative material icons — NOT real product
+ * photography. Each voice tag maps to 2-3 of these, matching the specific
+ * materials named in MATERIALS below. Kept as plain string tags here (no
+ * JSX) so this file stays a pure, dependency-free template function; the
+ * actual icon artwork lives in app/components/MaterialIcon.tsx.
+ */
+export type MaterialTag =
+  | "cardstock"
+  | "foil"
+  | "ribbon"
+  | "foam"
+  | "crinklePaper"
+  | "stickers"
+  | "kraftPaper"
+  | "biodegradable"
+  | "tissuePaper"
+  | "tape"
+  | "insertCard";
 
 type BudgetTier = "low" | "mid" | "high" | "unspecified";
 
@@ -119,6 +140,17 @@ const BRAND_FEEL: Record<VoiceTag, string> = {
   default: "Clean and dependable, prioritizing a smooth, no-surprises open.",
 };
 
+/** Which material icons illustrate each voice tag's MATERIALS copy above. */
+const MATERIAL_ICONS: Record<VoiceTag, MaterialTag[]> = {
+  minimal: ["cardstock", "tape"],
+  luxury: ["foil", "ribbon", "foam"],
+  playful: ["crinklePaper", "stickers"],
+  sustainable: ["kraftPaper", "biodegradable", "tape"],
+  cozy: ["tissuePaper", "ribbon", "crinklePaper"],
+  bold: ["tissuePaper", "foil", "stickers"],
+  default: ["tissuePaper", "tape", "insertCard"],
+};
+
 const BUDGET_NOTE: Record<BudgetTier, string> = {
   low: " Kept to a single box format and minimal add-ons to protect per-unit cost.",
   mid: " Balances a few brand-forward touches against per-unit cost.",
@@ -140,5 +172,6 @@ export function generateCoreBrief(input: CoreBriefInput): CoreBrief {
     inserts: INSERTS[voiceTag],
     revealMoment: `${REVEAL_MOMENT[voiceTag]} Designed with ${customerLabel || "your customer"} in mind.`,
     brandFeel: BRAND_FEEL[voiceTag],
+    materialIcons: MATERIAL_ICONS[voiceTag],
   };
 }

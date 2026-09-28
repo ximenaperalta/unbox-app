@@ -1,6 +1,7 @@
 "use client";
 
 import { CoreBrief } from "@/lib/generateCoreBrief";
+import MaterialIcon from "../components/MaterialIcon";
 
 interface OutputCardProps {
   brief: CoreBrief | null;
@@ -42,6 +43,13 @@ export default function OutputCard({ brief, onSave, isSaving, isSaved }: OutputC
               {label}
             </div>
             <p className="text-sm text-ink leading-relaxed">{brief[key]}</p>
+            {key === "materials" && brief.materialIcons.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {brief.materialIcons.map((tag) => (
+                  <MaterialIcon key={tag} tag={tag} />
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>
