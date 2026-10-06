@@ -38,17 +38,6 @@ export default function PricingPage() {
 
   const savedListRef = useRef<SavedScenariosListHandle>(null);
 
-  function handleSegmentChange(next: SegmentId) {
-    setSegmentId(next);
-    setAssumptions((prev) => assumptionsForSegment(next, prev.tierPrices));
-    setIsSaved(false);
-  }
-
-  function handleAssumptionsChange(next: Assumptions) {
-    setAssumptions(next);
-    setIsSaved(false);
-  }
-
   const calculate = useCallback(async (input: Assumptions) => {
     setIsCalculating(true);
     setCalcError(null);
@@ -72,10 +61,39 @@ export default function PricingPage() {
     }
   }, []);
 
+  // Calculate once on mount with the initial (Local) assumptions. Every
+  // later recalculation is triggered directly from the handlers below,
+  // not from an effect watching `assumptions` — calling setState from an
+  // effect that re-fires on every state change it also reads risks
+  // cascading renders, so the fetch is kicked off at the point the state
+  // actually changes instead.
   useEffect(() => {
-    calculate(assumptions);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assumptions]);
+    // Mount-only initial calculation. Deliberately does not read the
+    // `assumptions` state value — it recomputes the same starting point
+    // state was initialized with, so this effect has no state dependency
+    // at all and can't cascade. Every later recalculation happens from
+    // the event handlers below, triggered by the change itself rather
+    // than by an effect watching for it. Same fetch-on-mount shape as
+    // SavedResearchList/SavedOutputsList elsewhere in this app; the
+    // stricter rule below is a heuristic that doesn't apply cleanly to a
+    // network call with multiple status setters in its try/catch/finally.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    calculate(assumptionsForSegment("local", defaultPrices()));
+  }, [calculate]);
+
+  function handleSegmentChange(next: SegmentId) {
+    setSegmentId(next);
+    const nextAssumptions = assumptionsForSegment(next, assumptions.tierPrices);
+    setAssumptions(nextAssumptions);
+    setIsSaved(false);
+    calculate(nextAssumptions);
+  }
+
+  function handleAssumptionsChange(next: Assumptions) {
+    setAssumptions(next);
+    setIsSaved(false);
+    calculate(next);
+  }
 
   async function handleSave() {
     if (!result) return;
