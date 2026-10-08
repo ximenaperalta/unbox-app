@@ -15,6 +15,20 @@ interface AssumptionsPanelProps {
 
 const TIER_IDS: TierId[] = ["sample", "run", "line"];
 
+// React controlled <input type="number"> has a known quirk: when the parsed
+// number matches, React skips re-syncing the field's displayed text, so a
+// leading zero you type (e.g. "0350") never visually cleans up to "350" even
+// though the underlying number is correct. Stripping it directly on the DOM
+// node inside the event handler — before React re-renders — fixes the
+// display immediately instead of fighting the browser over it.
+function cleanLeadingZero(input: HTMLInputElement): string {
+  const cleaned = input.value.replace(/^0+(?=\d)/, "");
+  if (cleaned !== input.value) {
+    input.value = cleaned;
+  }
+  return cleaned;
+}
+
 export default function AssumptionsPanel({ value, onChange }: AssumptionsPanelProps) {
   const mixTotal = TIER_IDS.reduce((sum, id) => sum + (value.tierMix[id] || 0), 0);
 
@@ -42,7 +56,7 @@ export default function AssumptionsPanel({ value, onChange }: AssumptionsPanelPr
           type="number"
           min={0}
           value={value.totalUsers}
-          onChange={(e) => updateTotalUsers(Math.max(0, Number(e.target.value) || 0))}
+          onChange={(e) => updateTotalUsers(Math.max(0, Number(cleanLeadingZero(e.target)) || 0))}
           className="w-full border border-line px-3 py-2 text-sm bg-bg"
         />
       </label>
@@ -60,7 +74,7 @@ export default function AssumptionsPanel({ value, onChange }: AssumptionsPanelPr
                   type="number"
                   min={0}
                   value={value.tierPrices[id]}
-                  onChange={(e) => updatePrice(id, Math.max(0, Number(e.target.value) || 0))}
+                  onChange={(e) => updatePrice(id, Math.max(0, Number(cleanLeadingZero(e.target)) || 0))}
                   className="w-full border border-line px-3 py-2 text-sm bg-bg"
                 />
               </label>
@@ -71,7 +85,9 @@ export default function AssumptionsPanel({ value, onChange }: AssumptionsPanelPr
                   min={0}
                   max={100}
                   value={value.tierMix[id]}
-                  onChange={(e) => updateMix(id, Math.max(0, Math.min(100, Number(e.target.value) || 0)))}
+                  onChange={(e) =>
+                    updateMix(id, Math.max(0, Math.min(100, Number(cleanLeadingZero(e.target)) || 0)))
+                  }
                   className="w-full border border-line px-3 py-2 text-sm bg-bg"
                 />
               </label>
