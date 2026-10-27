@@ -1,6 +1,6 @@
-import Link from "next/link";
 import Nav from "./components/Nav";
 import Grain from "./components/Grain";
+import HeadlineVariant from "./components/HeadlineVariant";
 
 const PILLARS = [
   {
@@ -20,8 +20,8 @@ const PILLARS = [
 const ROADMAP = [
   { week: "Week 1", feature: "AI unboxing experience generator", status: "Live" },
   { week: "Week 2", feature: "Research + benchmarking dashboard", status: "Live" },
-  { week: "Week 3", feature: "Saved results dashboard", status: null },
-  { week: "Week 4", feature: "Competitor unboxing analysis", status: null },
+  { week: "Week 3", feature: "Pricing simulator", status: "Live" },
+  { week: "Week 4", feature: "Marketing kit generator + headline A/B test", status: "Live" },
   { week: "Week 5", feature: "Full packaging brief export", status: null },
 ];
 
@@ -39,36 +39,7 @@ export default function Home() {
             AI Venture Prototype
           </div>
 
-          <h1 className="font-display uppercase leading-[0.86] text-[clamp(48px,9.5vw,132px)] tracking-tight text-balance">
-            Design the
-            <br />
-            moment they
-            <br />
-            <span className="text-accent">open it.</span>
-          </h1>
-
-          <p className="font-tagline italic text-[clamp(18px,2.2vw,24px)] max-w-[26ch] mt-7 mb-6 leading-snug">
-            Every unboxing is a first impression — most brands never got to
-            design theirs.
-          </p>
-
-          <p className="text-[15.5px] text-ink-soft max-w-[46ch] leading-relaxed mb-9">
-            UNBOX is an AI tool that helps e-commerce brands and subscription
-            box creators design an intentional, memorable unboxing
-            experience — from the box itself to the moment it&apos;s opened.
-          </p>
-
-          <div className="flex items-center gap-5 flex-wrap">
-            <Link
-              href="/core"
-              className="font-label font-bold text-[13.5px] bg-ink text-bg px-7 py-4 inline-flex items-center gap-2 hover:bg-accent transition-colors"
-            >
-              Try the Core Agent →
-            </Link>
-            <span className="font-label text-[11.5px] text-ink-soft">
-              free · takes about 40 seconds
-            </span>
-          </div>
+          <HeadlineVariant />
         </div>
       </section>
 
