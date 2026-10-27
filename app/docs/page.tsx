@@ -236,6 +236,99 @@ annualRevenue  = sum of tierAnnual across all 3 tiers`}
             the Assumptions panel &mdash; the defaults are starting points, not fixed rules.
           </p>
         </article>
+
+        <article className="border border-line p-8 bg-bg-2 mt-8">
+          <div className="flex items-center justify-between gap-4 flex-wrap mb-2">
+            <h2 className="text-xl font-bold text-ink">
+              Week 4 — Marketing Kit Generator (/marketing) + homepage A/B test
+            </h2>
+            <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-accent border border-accent px-2.5 py-1 whitespace-nowrap">
+              Mixed: simulated + real
+            </span>
+          </div>
+          <p className="text-sm text-ink-soft mb-6 leading-relaxed">
+            Week 4 ships two different things, and they are NOT the same kind of
+            feature. The homepage headline (<code className="bg-bg px-1.5 py-0.5 border border-line text-ink">lib/abTest.ts</code>) is
+            a real, live A/B test &mdash; every page load picks Variant A or B at
+            random, logs a real row to <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">ab_events</code>, and
+            the results on <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/marketing</code> are
+            computed from that real data. The{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/marketing</code> kit
+            generator itself is the simulated half &mdash; same family as{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/core</code> and{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/research</code>, a
+            deterministic template function standing in for an AI call, clearly
+            labeled &ldquo;Simulated AI Output&rdquo;.
+          </p>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            Inputs (kit generator)
+          </h3>
+          <pre className="bg-ink text-bg text-xs p-4 overflow-x-auto mb-6">
+{`{
+  product: string,            // required
+  segment: "Local" | "Scale", // required
+}`}
+          </pre>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            Template logic (what a real prompt would ask for)
+          </h3>
+          <pre className="bg-ink text-bg text-xs p-4 overflow-x-auto mb-6 whitespace-pre-wrap">
+{`You are a marketing strategist for a packaging and unboxing brand.
+
+Given:
+- Product: {product}
+- Segment: {segment}  // "Local" (one product, Mexico-only, early) or
+                       // "Scale" (multiple lines, beyond Mexico)
+
+Return a structured marketing kit with exactly these five parts:
+1. persona – a single named persona matching the segment, with an age
+   range, description, pain point, and motivation
+2. landingCopy – a headline, subhead, and 3 body paragraphs
+3. socialPosts – exactly 10 short social captions
+4. videoScripts – exactly 3 short video scripts, each with a title, a
+   hook, and a script
+5. campaignCalendar – a 14-day calendar, one focus + channel per day
+
+Keep every field grounded in the stated product and segment. Do not
+invent a product or segment that wasn't given.`}
+          </pre>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            Current (simulated) implementation
+          </h3>
+          <p className="text-sm text-ink-soft leading-relaxed mb-6">
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">generateMarketingBundle()</code>{" "}
+            matches the product text against the same category-keyword lookup
+            used by{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">generateResearchBrief()</code>{" "}
+            (beauty, food, fashion, tech, home, subscription, or a general
+            default), and builds the persona from one of two fixed segment
+            profiles (Local/Scale). The 10 social posts and 3 video scripts are
+            built from fixed templates parameterized by product and category;
+            the 14-day calendar is a fixed sequence of channel/focus pairs. Pure
+            function, same testing approach as Weeks 1 and 2.
+          </p>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            The real part: the homepage A/B test
+          </h3>
+          <p className="text-sm text-ink-soft leading-relaxed">
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">pickVariant()</code> in{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">lib/abTest.ts</code> is
+            a plain coin flip, not a persistent per-visitor assignment (there&apos;s
+            still no auth/cookies in this project) and not a statistically-governed
+            rollout. <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">GET /api/marketing/ab</code> picks
+            a variant and logs a real impression row;{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">POST /api/marketing/ab/click</code> logs
+            a real click for that variant when the homepage CTA is clicked. The
+            results panel on <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/marketing</code> reads
+            those rows directly and says outright that current traffic is too
+            low for either variant&apos;s click-through rate to be statistically
+            significant &mdash; real counts, not a declared winner.
+          </p>
+        </article>
       </section>
 
       <footer className="relative z-[3] border-t border-line px-8 py-8 text-center font-label text-[11px] text-ink-soft">
