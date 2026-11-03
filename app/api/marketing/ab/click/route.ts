@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
     .insert({ variant, event_type: "click" });
 
   if (error) {
+    console.warn("Failed to log ab_events click:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 

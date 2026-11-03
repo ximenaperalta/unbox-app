@@ -35,13 +35,36 @@ export default function HeadlineVariant() {
   }, []);
 
   function handleCtaClick() {
-    fetch("/api/marketing/ab/click", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ variant }),
-    }).catch(() => {
-      /* non-blocking — the click still navigates even if logging fails */
+    // The CTA is a real <a href> — clicking it starts navigating to /core
+    // immediately, which could in principle cancel an in-flight request
+    // before the browser finishes sending it. Investigated this directly
+    // (production build, repeated real clicks, server-side log evidence —
+    // see Iteration Log) after production showed 7 impressions and 0
+    // clicks ever logged. The investigation did NOT confirm a request-loss
+    // bug: server logs showed the click route was reached on every test
+    // run regardless of whether plain fetch or sendBeacon was used — the
+    // most likely real explanation for 0 production clicks is simply that
+    // no visitor has clicked the CTA yet, consistent with this site's
+    // already-documented low traffic. navigator.sendBeacon is kept anyway
+    // as the standards-correct tool for "log this and the page may leave
+    // immediately after" (the same mechanism analytics scripts use for
+    // outbound click tracking) — a defensible improvement, not a bug fix
+    // with confirmed impact.
+    const body = new Blob([JSON.stringify({ variant })], {
+      type: "application/json",
     });
+    const sent = navigator.sendBeacon?.("/api/marketing/ab/click", body);
+    if (!sent) {
+      // Only reached if sendBeacon itself is unavailable or refuses the
+      // payload (very old browsers) — fetch is strictly worse here but
+      // better than nothing.
+      fetch("/api/marketing/ab/click", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ variant }),
+        keepalive: true,
+      }).catch(() => {});
+    }
   }
 
   const copy = HEADLINE_COPY[variant];
