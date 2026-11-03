@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { MarketingBundle } from "@/lib/generateMarketingBundle";
+import { MarketingBundle, generateMarketingBundle } from "@/lib/generateMarketingBundle";
 import MarketingForm, { MarketingFormValues } from "./MarketingForm";
 import MarketingOutput from "./MarketingOutput";
 import SavedMarketingList, { SavedMarketingListHandle } from "./SavedMarketingList";
@@ -11,9 +11,23 @@ import { supabase } from "@/lib/supabaseClient";
 import Nav from "../components/Nav";
 import Grain from "../components/Grain";
 
+// Shown on page load, before any visitor touches the form — so the brand
+// system (persona, landing copy, 10 posts, 3 scripts, 14-day calendar) is
+// visible immediately, not only after a form submission. Generated with the
+// exact same pure function a real submission uses, just with a stand-in
+// product — nothing here is hand-written or faked separately from the real
+// generator logic.
+const EXAMPLE_INPUT: MarketingFormValues = {
+  product: "a small-batch cold-brew coffee subscription box",
+  segment: "Local",
+};
+
 export default function MarketingPage() {
-  const [bundle, setBundle] = useState<MarketingBundle | null>(null);
-  const [lastValues, setLastValues] = useState<MarketingFormValues | null>(null);
+  const [bundle, setBundle] = useState<MarketingBundle>(() =>
+    generateMarketingBundle(EXAMPLE_INPUT)
+  );
+  const [lastValues, setLastValues] = useState<MarketingFormValues>(EXAMPLE_INPUT);
+  const [isExample, setIsExample] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -48,16 +62,18 @@ export default function MarketingPage() {
         campaignCalendar: data.campaignCalendar,
       });
       setLastValues(values);
+      setIsExample(false);
     } catch (err) {
+      // Keep whatever was already on screen (example or a prior real kit) —
+      // a failed regeneration attempt shouldn't blank out working content.
       setGenerateError(err instanceof Error ? err.message : "Something went wrong.");
-      setBundle(null);
     } finally {
       setIsGenerating(false);
     }
   }
 
   async function handleSave() {
-    if (!bundle || !lastValues) return;
+    if (!bundle || !lastValues || isExample) return;
     setIsSaving(true);
     setSaveError(null);
 
@@ -96,9 +112,9 @@ export default function MarketingPage() {
           Say it before they open it.
         </h1>
         <p className="text-[15.5px] text-ink-soft max-w-[54ch] mb-7 leading-relaxed">
-          Describe your product and segment — get back a persona, landing
-          page copy, 10 social posts, 3 video scripts, and a 14-day
-          campaign calendar.
+          A persona, landing page copy, 10 social posts, 3 video scripts,
+          and a 14-day campaign calendar — generated below for a sample
+          product right now. Describe your own underneath to replace it.
         </p>
 
         <BrandStrip />
@@ -124,7 +140,8 @@ export default function MarketingPage() {
             </h2>
             <MarketingOutput
               bundle={bundle}
-              productLabel={lastValues?.product ?? "this product"}
+              productLabel={lastValues.product}
+              isExample={isExample}
               onSave={handleSave}
               isSaving={isSaving}
               isSaved={isSaved}

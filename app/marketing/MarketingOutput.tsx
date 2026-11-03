@@ -5,8 +5,9 @@ import { MarketingBundle } from "@/lib/generateMarketingBundle";
 import PersonaCard from "./PersonaCard";
 
 interface MarketingOutputProps {
-  bundle: MarketingBundle | null;
+  bundle: MarketingBundle;
   productLabel: string;
+  isExample: boolean;
   onSave: () => void;
   isSaving: boolean;
   isSaved: boolean;
@@ -81,27 +82,29 @@ function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) 
 export default function MarketingOutput({
   bundle,
   productLabel,
+  isExample,
   onSave,
   isSaving,
   isSaved,
 }: MarketingOutputProps) {
   const [activeTab, setActiveTab] = useState<TabKey>("copy");
 
-  if (!bundle) {
-    return (
-      <div className="border border-dashed border-line px-6 py-10 text-center text-sm text-ink-soft">
-        Fill in the form and generate a kit to see it here.
-      </div>
-    );
-  }
-
   return (
     <div className="border border-line p-6 flex flex-col gap-6">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h3 className="font-bold text-ink">Marketing Kit</h3>
-        <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-accent border border-accent px-2.5 py-1">
-          Simulated AI Output
-        </span>
+        <h3 className="font-bold text-ink">
+          {isExample ? "Marketing Kit — example" : "Marketing Kit"}
+        </h3>
+        <div className="flex items-center gap-2 flex-wrap">
+          {isExample && (
+            <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-ink-soft border border-line px-2.5 py-1">
+              Sample product — not yet customized
+            </span>
+          )}
+          <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-accent border border-accent px-2.5 py-1">
+            Simulated AI Output
+          </span>
+        </div>
       </div>
 
       <PersonaCard persona={bundle.persona} />
@@ -206,14 +209,17 @@ export default function MarketingOutput({
       <div className="flex items-center gap-3 flex-wrap">
         <button
           onClick={onSave}
-          disabled={isSaving || isSaved}
+          disabled={isSaving || isSaved || isExample}
+          title={isExample ? "Describe your own product below before saving" : undefined}
           className="font-label font-bold text-[13.5px] bg-ink text-bg px-6 py-2.5 hover:bg-accent disabled:bg-line disabled:text-ink-soft disabled:cursor-not-allowed transition-colors"
         >
           {isSaved ? "Saved ✓" : isSaving ? "Saving…" : "Save to library"}
         </button>
         <CopyButton text={exportAsText(bundle, productLabel)} label="Export (copy as text)" />
         <span className="font-label text-[10.5px] text-ink-soft">
-          copies the full kit as plain text
+          {isExample
+            ? "customize the kit below to save it"
+            : "copies the full kit as plain text"}
         </span>
       </div>
     </div>
