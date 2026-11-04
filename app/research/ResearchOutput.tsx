@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import { ResearchBrief, Competitor } from "@/lib/generateResearchBrief";
 
 interface ResearchOutputProps {
-  brief: ResearchBrief | null;
+  brief: ResearchBrief;
+  isExample: boolean;
   onSave: () => void;
   isSaving: boolean;
   isSaved: boolean;
@@ -39,12 +40,17 @@ function threatBreakdown(competitors: Competitor[]) {
   });
 }
 
-export default function ResearchOutput({ brief, onSave, isSaving, isSaved }: ResearchOutputProps) {
+export default function ResearchOutput({
+  brief,
+  isExample,
+  onSave,
+  isSaving,
+  isSaved,
+}: ResearchOutputProps) {
   const [filter, setFilter] = useState("");
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
 
   const filteredCompetitors = useMemo(() => {
-    if (!brief) return [];
     const q = filter.trim().toLowerCase();
     if (!q) return brief.competitors;
     return brief.competitors.filter(
@@ -56,24 +62,25 @@ export default function ResearchOutput({ brief, onSave, isSaving, isSaved }: Res
     );
   }, [brief, filter]);
 
-  const breakdown = useMemo(() => (brief ? threatBreakdown(brief.competitors) : []), [brief]);
-  const overallRow = brief?.riskMap.find((r) => r.label.startsWith("Overall"));
-
-  if (!brief) {
-    return (
-      <div className="border border-dashed border-line px-6 py-10 text-center text-sm text-ink-soft">
-        Fill in the form and run research to see it here.
-      </div>
-    );
-  }
+  const breakdown = useMemo(() => threatBreakdown(brief.competitors), [brief]);
+  const overallRow = brief.riskMap.find((r) => r.label.startsWith("Overall"));
 
   return (
     <div className="border border-line p-6 flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <h3 className="font-bold text-ink">Research Brief</h3>
-        <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-accent border border-accent px-2.5 py-1">
-          Simulated AI Output
-        </span>
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <h3 className="font-bold text-ink">
+          {isExample ? "Research Brief — example" : "Research Brief"}
+        </h3>
+        <div className="flex items-center gap-2 flex-wrap">
+          {isExample && (
+            <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-ink-soft border border-line px-2.5 py-1">
+              Sample product — not yet customized
+            </span>
+          )}
+          <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-accent border border-accent px-2.5 py-1">
+            Simulated AI Output
+          </span>
+        </div>
       </div>
 
       <div className="flex gap-1 border-b border-line -mb-2 flex-wrap" role="tablist">
@@ -240,10 +247,11 @@ export default function ResearchOutput({ brief, onSave, isSaving, isSaved }: Res
 
       <button
         onClick={onSave}
-        disabled={isSaving || isSaved}
+        disabled={isSaving || isSaved || isExample}
+        title={isExample ? "Describe your own product below before saving" : undefined}
         className="font-label font-bold text-[13.5px] self-start bg-ink text-bg px-6 py-2.5 hover:bg-accent disabled:bg-line disabled:text-ink-soft disabled:cursor-not-allowed transition-colors"
       >
-        {isSaved ? "Saved ✓" : isSaving ? "Saving…" : "Save to library"}
+        {isExample ? "Save to library" : isSaved ? "Saved ✓" : isSaving ? "Saving…" : "Save to library"}
       </button>
     </div>
   );

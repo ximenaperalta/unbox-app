@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ResearchBrief } from "@/lib/generateResearchBrief";
+import { ResearchBrief, generateResearchBrief } from "@/lib/generateResearchBrief";
 import ResearchForm, { ResearchFormValues } from "./ResearchForm";
 import ResearchOutput from "./ResearchOutput";
 import SavedResearchList, { SavedResearchListHandle } from "./SavedResearchList";
@@ -9,9 +9,24 @@ import { supabase } from "@/lib/supabaseClient";
 import Nav from "../components/Nav";
 import Grain from "../components/Grain";
 
+// Shown on page load, before any visitor touches the form — so the research
+// brief (global examples, Mexico note, competitor table, risk map) is
+// visible immediately, not only after a form submission. Same fix applied
+// to /marketing (Week 4 grading feedback: a generated-content page must
+// show real example output on load, not an empty/gated state) — generated
+// with the exact same pure function a real submission uses, just with a
+// stand-in product.
+const EXAMPLE_INPUT: ResearchFormValues = {
+  product: "a small-batch cold-brew coffee subscription box",
+  market: "Mexico City, urban professionals 25-40",
+};
+
 export default function ResearchPage() {
-  const [brief, setBrief] = useState<ResearchBrief | null>(null);
-  const [lastValues, setLastValues] = useState<ResearchFormValues | null>(null);
+  const [brief, setBrief] = useState<ResearchBrief>(() =>
+    generateResearchBrief(EXAMPLE_INPUT)
+  );
+  const [lastValues, setLastValues] = useState<ResearchFormValues>(EXAMPLE_INPUT);
+  const [isExample, setIsExample] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -45,16 +60,19 @@ export default function ResearchPage() {
         riskMap: data.riskMap,
       });
       setLastValues(values);
+      setIsExample(false);
     } catch (err) {
+      // Keep whatever was already on screen (example or a prior real
+      // brief) — a failed regeneration attempt shouldn't blank out
+      // working content.
       setGenerateError(err instanceof Error ? err.message : "Something went wrong.");
-      setBrief(null);
     } finally {
       setIsGenerating(false);
     }
   }
 
   async function handleSave() {
-    if (!brief || !lastValues) return;
+    if (!brief || !lastValues || isExample) return;
     setIsSaving(true);
     setSaveError(null);
 
@@ -92,9 +110,9 @@ export default function ResearchPage() {
           Know who you&apos;re up against.
         </h1>
         <p className="text-[15.5px] text-ink-soft max-w-[54ch] mb-12 leading-relaxed">
-          Describe your product and target market — get back global reference
-          points, a Mexico-specific read, and an 8-way competitor breakdown
-          you can actually use.
+          Global reference points, a Mexico-specific read, and an 8-way
+          competitor breakdown — generated below for a sample product right
+          now. Describe your own underneath to replace it.
         </p>
 
         <div className="grid md:grid-cols-2 gap-12">
@@ -114,6 +132,7 @@ export default function ResearchPage() {
             </h2>
             <ResearchOutput
               brief={brief}
+              isExample={isExample}
               onSave={handleSave}
               isSaving={isSaving}
               isSaved={isSaved}
