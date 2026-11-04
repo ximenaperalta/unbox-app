@@ -171,6 +171,27 @@ unless the model has verified, current information about one.`}
             archetypes are marked high vs. low threat. Pure function, same testing
             approach as Week 1.
           </p>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2 mt-6">
+            Real competitor research (done separately, outside the generator)
+          </h3>
+          <p className="text-sm text-ink-soft leading-relaxed">
+            The 8 archetypes above are what{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">generateResearchBrief()</code>{" "}
+            actually returns at runtime &mdash; they&apos;re deliberately not invented
+            named companies. But the competitive landscape those archetypes stand in
+            for is real, and was researched separately, by hand, outside the app, to
+            confirm the problem /research exists to address isn&apos;t hypothetical:
+            Packify.ai (AI packaging design platform, 200,000+ brands served &mdash;
+            packify.ai), Packlane (custom packaging manufacturer with a free 3D design
+            tool &mdash; packlane.com/about), Grupak (large Mexican industrial
+            packaging group, 500,000+ tonnes/year &mdash; Milenio), Packaging Store de
+            México (verified Mexican supplier since 2003 &mdash; cosmos.com.mx), and
+            Crown Holdings (global packaging incumbent with Mexico operations &mdash;
+            its Heineken México acquisition). Sources and the full write-up are in
+            the Week 2 submission&apos;s &ldquo;Real Market &amp; Competitor
+            Research&rdquo; section (&sect;5.5).
+          </p>
         </article>
 
         <article className="border border-line p-8 bg-bg-2 mt-8">
