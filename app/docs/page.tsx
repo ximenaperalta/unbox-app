@@ -350,6 +350,94 @@ invent a product or segment that wasn't given.`}
             significant &mdash; real counts, not a declared winner.
           </p>
         </article>
+
+        <article className="border border-line p-8 bg-bg-2 mt-8">
+          <div className="flex items-center justify-between gap-4 flex-wrap mb-2">
+            <h2 className="text-xl font-bold text-ink">
+              Week 5 — Guided Assistant (/chat)
+            </h2>
+            <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-accent border border-accent px-2.5 py-1 whitespace-nowrap">
+              Simulated
+            </span>
+          </div>
+          <p className="text-sm text-ink-soft mb-6 leading-relaxed">
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/chat</code>{" "}
+            is a guided concierge, not an open-ended chatbot: three quick
+            questions, then a recommendation for which existing UNBOX tool
+            fits what the visitor described, with a reason. The logic
+            (<code className="bg-bg px-1.5 py-0.5 border border-line text-ink">lib/chatAssistant.ts</code>)
+            is deterministic and keyword-matched — same family as{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">generateCoreBrief()</code>,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">generateResearchBrief()</code>,
+            and{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">generateMarketingBundle()</code>
+            {" "}— not a real language model call. A rule-based assistant was
+            chosen deliberately this week over a real LLM: zero API cost or
+            key-management risk, and a predictable live demo.
+          </p>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            Inputs
+          </h3>
+          <pre className="bg-ink text-bg text-xs p-4 overflow-x-auto mb-6">
+{`{
+  product: string,      // required
+  market: string,       // optional
+  helpNeeded:
+    "unboxing" | "research" | "pricing" | "marketing" | "not-sure"
+}`}
+          </pre>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            Template logic (what a real prompt would ask for)
+          </h3>
+          <pre className="bg-ink text-bg text-xs p-4 overflow-x-auto mb-6 whitespace-pre-wrap">
+{`You are a concierge for a packaging and unboxing design platform with
+four tools: /core (unboxing brief), /research (competitor research),
+/pricing (revenue calculator), /marketing (content kit generator).
+
+Given a visitor's product, target market, and what they say they need
+help with, recommend exactly one of the four tools and explain why in
+one sentence grounded in their actual product. If they're not sure,
+infer the best fit from their product/market description instead of
+asking again. If their input isn't about a product or packaging
+decision at all, decline politely and point back at the four tools
+directly, rather than guessing a recommendation.`}
+          </pre>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            Current (simulated) implementation
+          </h3>
+          <p className="text-sm text-ink-soft leading-relaxed mb-6">
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">pickRecommendation()</code>{" "}
+            maps the Q3 answer directly to a tool; a &ldquo;not sure&rdquo;
+            answer falls back to keyword cues in the product/market text,
+            defaulting to <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/core</code> as
+            the natural first stop.{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">checkGuardrail()</code> is
+            a fixed set of off-topic/inappropriate patterns checked against
+            the free-text product and market fields only — not a real
+            moderation model. When it fires, the guardrail message replaces
+            the recommendation entirely; nothing about the visitor&apos;s
+            product gets recommended.
+          </p>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            The human checkpoint
+          </h3>
+          <p className="text-sm text-ink-soft leading-relaxed">
+            After the three questions, a review card shows exactly what was
+            parsed and the computed recommendation before anything is saved —
+            &ldquo;Looks right →&rdquo; confirms and writes one row to{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">chat_sessions</code>;
+            &ldquo;Let me re-answer&rdquo; discards it and starts over. A
+            guardrail hit logs its own row (
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">guardrail_triggered: true</code>,
+            no recommendation) without going through the checkpoint, since
+            there&apos;s nothing to confirm. The result card&apos;s thumbs
+            up/down updates that same row by id.
+          </p>
+        </article>
       </section>
 
       <footer className="relative z-[3] border-t border-line px-8 py-8 text-center font-label text-[11px] text-ink-soft">
