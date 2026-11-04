@@ -68,25 +68,25 @@ export default function ChatResult({
             onClick={() => rate("up")}
             disabled={!!rating || isRating}
             aria-label="Helpful"
-            className={`font-label text-[12px] border px-3 py-1.5 transition-colors disabled:cursor-not-allowed ${
+            className={`font-label text-[11px] uppercase tracking-[0.05em] border px-3 py-1.5 transition-colors disabled:cursor-not-allowed ${
               rating === "up"
                 ? "border-accent text-accent bg-accent/10"
                 : "border-line text-ink-soft hover:border-ink hover:text-ink"
             }`}
           >
-            👍 Up
+            Helpful
           </button>
           <button
             onClick={() => rate("down")}
             disabled={!!rating || isRating}
             aria-label="Not helpful"
-            className={`font-label text-[12px] border px-3 py-1.5 transition-colors disabled:cursor-not-allowed ${
+            className={`font-label text-[11px] uppercase tracking-[0.05em] border px-3 py-1.5 transition-colors disabled:cursor-not-allowed ${
               rating === "down"
                 ? "border-ink text-ink bg-line/40"
                 : "border-line text-ink-soft hover:border-ink hover:text-ink"
             }`}
           >
-            👎 Down
+            Not helpful
           </button>
         </div>
       </div>
