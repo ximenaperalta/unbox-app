@@ -438,6 +438,71 @@ directly, rather than guessing a recommendation.`}
             up/down updates that same row by id.
           </p>
         </article>
+
+        <article className="border border-line p-8 bg-bg-2 mt-8">
+          <div className="flex items-center justify-between gap-4 flex-wrap mb-2">
+            <h2 className="text-xl font-bold text-ink">
+              Week 6 — Integrated Venture (/demo, /dashboard)
+            </h2>
+            <span className="font-label text-[10.5px] font-bold uppercase tracking-[0.05em] text-ink-soft border border-line px-2.5 py-1 whitespace-nowrap">
+              Integration — no new simulated agent
+            </span>
+          </div>
+          <p className="text-sm text-ink-soft mb-6 leading-relaxed">
+            Week 6 doesn&apos;t add a new generator — it ties the five
+            already built (<code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/core</code>,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/research</code>,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/pricing</code>,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/marketing</code>, and the{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/chat</code> router)
+            together into one venture, and is honest about how real each
+            part is.
+          </p>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            /demo
+          </h3>
+          <p className="text-sm text-ink-soft leading-relaxed mb-6">
+            A static guided walkthrough: links to every feature, the agent
+            map (which of the six agents are simulated vs. real, and how
+            Chat routes to the other five), the testing summary, a practical
+            impact check (real value created, real harm considered and
+            avoided), and the Version 2 roadmap. No database reads — every
+            number on this page comes from <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/dashboard</code> instead,
+            so the two pages never disagree about what&apos;s true.
+          </p>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            /dashboard
+          </h3>
+          <p className="text-sm text-ink-soft leading-relaxed mb-6">
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">GET /api/dashboard/summary</code> queries
+            all six tables this semester has created (
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">core_outputs</code>,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">research_outputs</code>,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">pricing_scenarios</code>,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">marketing_assets</code>,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">ab_events</code>,{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">chat_sessions</code>) for
+            a real row count plus the 3 most recent rows, and the page
+            renders exactly what comes back — no new schema, no mock data.
+            Read-only: it never writes anything.
+          </p>
+
+          <h3 className="font-label text-[11px] uppercase tracking-[0.08em] text-ink-soft mb-2">
+            Why no new &ldquo;agent&rdquo; this week
+          </h3>
+          <p className="text-sm text-ink-soft leading-relaxed">
+            The brief asks for an <em>integrated</em> venture, not a sixth
+            generator — adding another simulated template would have
+            repeated Weeks 1, 2, and 4&apos;s pattern without actually
+            answering the week&apos;s real question, which is whether the
+            five pieces already built add up to something coherent. /demo
+            and /dashboard are the answer: one page that explains the whole
+            system, and one page that proves, with live numbers, that it&apos;s
+            actually being used.
+          </p>
+        </article>
       </section>
 
       <footer className="relative z-[3] border-t border-line px-8 py-8 text-center font-label text-[11px] text-ink-soft">
