@@ -31,6 +31,34 @@ const TABS = [
 
 type TabKey = (typeof TABS)[number]["key"];
 
+const REAL_SOURCED_EXAMPLES = [
+  {
+    name: "Packify.ai",
+    why: "AI packaging design platform. States it serves “200,000+ Brands & designers worldwide” and has supported 2,000+ custom design projects; turns a text description into 3D packaging concepts and print-ready dielines on a credit-based pricing model. Closest direct analog to /core and /research combined, at a scale UNBOX doesn't operate at.",
+    source: "packify.ai",
+  },
+  {
+    name: "Packlane",
+    why: "Custom packaging manufacturer. Its About page offers a free 3D Design Tool with a live dieline preview and instant quoting, and frames packaging as an unboxing moment: “inside printing is one of the easiest ways to make an unboxing feel intentional.” Competes directly on the same reveal-moment problem UNBOX's /core brief is written for.",
+    source: "packlane.com/about",
+  },
+  {
+    name: "Grupak",
+    why: "Large Mexican industrial packaging group, producing over 500,000 tonnes of paper and corrugated cardboard per year, covered in Mexican business press. The kind of large-scale local manufacturer a founder would eventually hand a packaging brief to.",
+    source: "Milenio — “Grupak, el grupo industrial mexicano”",
+  },
+  {
+    name: "Packaging Store de México",
+    why: "Smaller, verified Mexican packaging supplier (listed as a verified partner supplier since 2003 in the Cosmos industrial directory). Closer in scale to the kind of supplier UNBOX's target founder would realistically approach with a finished brief.",
+    source: "cosmos.com.mx — Packaging Store de México",
+  },
+  {
+    name: "Crown Holdings (Crown Cork & Seal)",
+    why: "Global industrial packaging incumbent with confirmed Mexico operations, including a beverage-can plant expansion in Monterrey and the acquisition of Heineken's Mexican packaging business. The opposite end of the spectrum from Packify/Packlane — packaging is also a capital-intensive industrial business, not only a DTC design problem.",
+    source: "Crown Holdings — Heineken Mexico acquisition announcement",
+  },
+];
+
 function threatBreakdown(competitors: Competitor[]) {
   const order: Competitor["threat"][] = ["High", "Med", "Low"];
   const total = competitors.length || 1;
@@ -190,6 +218,36 @@ export default function ResearchOutput({
                 )}
               </tbody>
             </table>
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-line">
+            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+              <div className="font-label text-[11px] uppercase tracking-[0.06em] text-ink-soft">
+                5 real, sourced examples
+              </div>
+              <span className="font-label text-[10px] font-bold uppercase tracking-[0.05em] text-ink border border-ink px-2 py-0.5">
+                Real research — not simulated
+              </span>
+            </div>
+            <p className="text-xs text-ink-soft mb-4 max-w-[64ch]">
+              The 8 competitors above are strategy archetypes UNBOX generates per category, not
+              named companies. These 5 are real, named organizations actually operating in this
+              space, researched and sourced by hand for Week 2 — kept here so the live page shows
+              the same research the submission packet documents.
+            </p>
+            <div className="flex flex-col gap-4">
+              {REAL_SOURCED_EXAMPLES.map((ex) => (
+                <div key={ex.name} className="border border-line p-4">
+                  <div className="flex items-baseline justify-between gap-3 flex-wrap mb-1.5">
+                    <span className="font-bold text-ink text-sm">{ex.name}</span>
+                    <span className="font-label text-[10.5px] text-ink-soft whitespace-nowrap">
+                      Source: {ex.source}
+                    </span>
+                  </div>
+                  <p className="text-xs text-ink-soft leading-relaxed">{ex.why}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

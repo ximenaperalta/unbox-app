@@ -188,9 +188,12 @@ unless the model has verified, current information about one.`}
             packaging group, 500,000+ tonnes/year &mdash; Milenio), Packaging Store de
             México (verified Mexican supplier since 2003 &mdash; cosmos.com.mx), and
             Crown Holdings (global packaging incumbent with Mexico operations &mdash;
-            its Heineken México acquisition). Sources and the full write-up are in
-            the Week 2 submission&apos;s &ldquo;Real Market &amp; Competitor
-            Research&rdquo; section (&sect;5.5).
+            its Heineken México acquisition). These same 5 companies, with their
+            sources, are now shown directly on the live{" "}
+            <code className="bg-bg px-1.5 py-0.5 border border-line text-ink">/research</code>{" "}
+            page itself, under the Competitors tab &mdash; not only in the submission
+            packet. The full write-up is in the Week 2 submission&apos;s &ldquo;Real
+            Market &amp; Competitor Research&rdquo; section (&sect;5.5).
           </p>
         </article>
 
